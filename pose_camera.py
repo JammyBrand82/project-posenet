@@ -17,6 +17,10 @@ import collections
 from functools import partial
 import re
 import time
+import os
+import threading
+import time
+from azure.iot.device import IoTHubDeviceClient
 
 import numpy as np
 from PIL import Image
@@ -24,6 +28,8 @@ import svgwrite
 import gstreamer
 
 from pose_engine import PoseEngine
+
+CONNECTION_STRING = "HostName=ProjectEagleIoTHubsnqdqexxbvhve.azure-devices.net;DeviceId=JetsonPoC;SharedAccessKey=wmDlJybyGEwkEpjCKCBQjg4StBAgZWBEQFbuqMnWASU="
 
 EDGES = (
     ('nose', 'left eye'),
@@ -46,6 +52,23 @@ EDGES = (
     ('left knee', 'left ankle'),
     ('right knee', 'right ankle'),
 )
+
+def iothub_client_init():
+    # Create an IoT Hub Client
+    client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
+    return client
+
+def iothub_client_send_telemetry(message):
+    try:
+        client = iothub_client_init()
+        #message = "{\"score\":0.4, \"nose-x\": 210, \"nose-y\": 152, \"nose-score\": 1.0, \"left-eye-x\": 210, \"left-eye-y\": 152, \"left-eye-score\": 1.0, \"right-eye-x\": 210, \"right-eye-y\": 152, \"right-eye-score\": 1.0, \"left-ear-x\": 210, \"left-ear-y\": 152, \"left-ear-score\": 1.0, \"right-ear-x\": 210, \"right-ear-y\": 152, \"right-ear-score\": 1.0, \"left-shoulder-x\": 210, \"left-shoulder-y\": 152, \"left-shoulder-score\": 1.0, \"right-shoulder-x\": 210, \"right-shoulder-y\": 152, \"right-shoulder-score\": 1.0, \"left-elbow-x\": 210, \"left-elbow-y\": 152, \"left-elbow-score\": 1.0, \"right-elbow-x\": 210, \"right-elbow-y\": 152, \"right-elbow-score\": 0.9, \"left-wrist-x\": 210, \"left-wrist-y\": 152, \"left-wrist-score\": 1.0, \"right-wrist-x\": 210, \"right-wrist-y\": 152, \"right-wrist-score\": 1.0, \"left-hip-x\": 210, \"left-hip-y\": 152, \"left-hip-score\": 1.0, \"right-hip-x\": 210, \"right-hip-y\": 152, \"right-hip-score\": 1.0, \"left-knee-x\": 210, \"left-knee-y\": 152, \"left-knee-score\": 1.0, \"right-knee-x\": 210, \"right-knee-y\": 152, \"right-knee-score\": 1.0, \"left-ankle-x\": 210, \"left-ankle-y\": 152, \"left-ankle-score\": 1.0, \"right-ankle-x\": 210, \"right-ankle-y\": 152, \"right-ankle-score\": 1.0}"
+        #message = "{\"score\":1, \"parts\":[{\"part\": \"nose\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left eye\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right eye\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left ear\", \"x\": 210, \"y\": 152, \"score\":1.0},  {\"part\": \"right ear\", \"x\": 210, \"y\": 152, \"score\"
+        #:1.0}, {\"part\": \"left shoulder\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right shoulder\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left elbow\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right elbow\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left wrist\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right wrist\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left hip\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right hip\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left knee\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right knee\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"left ankle\", \"x\": 210, \"y\": 152, \"score\":1.0}, {\"part\": \"right ankle\", \"x\": 210, \"y\": 152, \"score\":1.0}]}"
+
+        client.send_message(message)
+        print("Message Sent")
+    except KeyboardInterrupt:
+        print("IoT Hub error")
 
 
 def shadow_text(dwg, x, y, text, font_size=16):
@@ -153,6 +176,7 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
         for pose in outputs:
+            print(pose)
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
 
