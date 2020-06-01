@@ -172,6 +172,7 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
         for pose in outputs:
+            if pose.score < 0.4: continue
             message = "{\"score\":" + str(pose.score) + ","
             for label, keypoint in pose.keypoints.items():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
