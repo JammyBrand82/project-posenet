@@ -45,7 +45,7 @@ def main():
 
         for pose in outputs:
             pose_camera.draw_pose(svg_canvas, pose, src_size, inference_box)
-
+            print(type(pose))
         return (svg_canvas.tostring(), background_locked)
 
     pose_camera.run(run_inference, render_overlay)
