@@ -176,8 +176,10 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
         for pose in outputs:
-            for att in dir(pose.keypoints):
-                print (att, getattr(pose.keypoints,att))
+            for keypoint in pose.keypoints:
+                print(keypoint)
+            #for att in dir(pose.keypoints):
+            #    print (att, getattr(pose.keypoints,att))
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
 
