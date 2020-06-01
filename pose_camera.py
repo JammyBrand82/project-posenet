@@ -178,7 +178,7 @@ def main():
         for pose in outputs:
             #for att in dir(pose):
             #    print (att, getattr(pose,att))
-            print (pose.keypoints)
+            print (pose.keypoints[0])
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
 
