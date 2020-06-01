@@ -176,7 +176,8 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
         for pose in outputs:
-            print(pose.__dir__)
+            for att in dir(pose):
+                print (att, getattr(pose,att))
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
 
