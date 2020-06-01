@@ -176,9 +176,9 @@ def main():
 
         shadow_text(svg_canvas, 10, 20, text_line)
         for pose in outputs:
-            message = "{\"score\":" + pose.score + ","
+            message = "{\"score\":" + str(pose.score) + ","
             for label, keypoint in pose.keypoints.items():
-                message += "\"" + label.replace(" ", "-") + "-x\": " + keypoint.yx[1] + "\"" + label.replace(" ", "-") + "-y\": " + keypoint.yx[0] + "\"" + label.replace(" ", "-") + "-score\": " + keypoint.score + "," 
+                message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + "\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + "\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
                 #print(' %-20s x=%-4d y=%-4d score=%.1f' %
                     #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
             message += "}"
