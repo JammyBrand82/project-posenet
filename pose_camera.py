@@ -21,6 +21,8 @@ import os
 import threading
 import time
 from azure.iot.device import IoTHubDeviceClient
+from colorama import Fore
+from colorama import Style
 
 import numpy as np
 from PIL import Image
@@ -179,7 +181,10 @@ def main():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
                 #print(' %-20s x=%-4d y=%-4d score=%.1f' %
                     #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
-            print(pose.keypoints["nose"].yx[1])
+            if previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1] > 20
+                message += f"{Fore.RED}\"fall\": true{Style.RESET_ALL}"
+            else
+                message += "\"fall\": false"
             message += "}"
             print(message)
             iothub_client_send_telemetry(message)
@@ -192,3 +197,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
