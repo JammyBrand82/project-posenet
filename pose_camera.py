@@ -158,7 +158,7 @@ def main():
         return engine.run_inference(input_tensor)
 
     def render_overlay(engine, output, src_size, inference_box):
-        global previous_pose
+        nonlocal previous_pose
         nonlocal n, sum_process_time, sum_inference_time, fps_counter
 
         svg_canvas = svgwrite.Drawing('', size=src_size)
