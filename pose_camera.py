@@ -56,8 +56,6 @@ EDGES = (
     ('right knee', 'right ankle'),
 )
 
-previous_pose = None
-
 def iothub_client_init():
     # Create an IoT Hub Client
     client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
@@ -160,6 +158,7 @@ def main():
         return engine.run_inference(input_tensor)
 
     def render_overlay(engine, output, src_size, inference_box):
+        global previous_pose = None
         nonlocal n, sum_process_time, sum_inference_time, fps_counter
 
         svg_canvas = svgwrite.Drawing('', size=src_size)
