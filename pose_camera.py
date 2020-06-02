@@ -153,6 +153,7 @@ def main():
     sum_inference_time = 0
     ctr = 0
     fps_counter  = avg_fps_counter(30)
+    previous_pose = None
 
     def run_inference(engine, input_tensor):
         return engine.run_inference(input_tensor)
