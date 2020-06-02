@@ -181,20 +181,14 @@ def main():
             message = "{\"score\":" + str(pose.score) + ","
             for label, keypoint in pose.keypoints.items():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
-                #print(' %-20s x=%-4d y=%-4d score=%.1f' %
-                    #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
-            if previous_pose is not None and (previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1]) > 10:
+            if previous_pose is not None and (previous_pose.keypoints["nose"].yx[0] - pose.keypoints["nose"].yx[0]) > 20:
                 message += f"{Fore.RED}\"fall\": true{Style.RESET_ALL}"
             else:
                 message += "\"fall\": false"
             message += "}"
-            print(previous_pose)
             if previous_pose is not None:
-                print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[1])}')
-                print(f'Difference: {str(previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1])}')
-
-            print(f'Current nose: {str(pose.keypoints["nose"].yx[1])}')
-            print(message)
+            #    print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[0])}')
+                print(f'Difference: {str(previous_pose.keypoints["nose"].yx[0] - pose.keypoints["nose"].yx[0])}')
             try:
                 iothub_client_send_telemetry(message)
             except KeyboardInterrupt:
