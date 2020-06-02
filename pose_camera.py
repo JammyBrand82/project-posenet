@@ -179,7 +179,7 @@ def main():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
                 #print(' %-20s x=%-4d y=%-4d score=%.1f' %
                     #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
-            print(pose.keypoints["nose"])
+            print(pose.keypoints["nose"].yx[1])
             message += "}"
             print(message)
             iothub_client_send_telemetry(message)
