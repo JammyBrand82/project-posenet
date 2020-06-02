@@ -202,6 +202,7 @@ def main():
             
             draw_pose(svg_canvas, pose, src_size, inference_box)
             previous_pose = copy.deepcopy(pose)
+            time.sleep(.5)
         return (svg_canvas.tostring(), False)
 
     run(run_inference, render_overlay)
