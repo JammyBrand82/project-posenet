@@ -20,6 +20,7 @@ import time
 import os
 import threading
 import time
+import copy
 from azure.iot.device import IoTHubDeviceClient
 from colorama import Fore
 from colorama import Style
@@ -191,13 +192,14 @@ def main():
                 print(f'Difference: {str(previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1])}')
 
             print(f'Current nose: {str(pose.keypoints["nose"].yx[1])}')
-            #print(message)
+            print(message)
             try:
                 iothub_client_send_telemetry(message)
             except KeyboardInterrupt:
                 print("IoT Hub error")
-            previous_pose = pose
+            
             draw_pose(svg_canvas, pose, src_size, inference_box)
+            previous_pose = copy.deepcopy(pose)
         return (svg_canvas.tostring(), False)
 
     run(run_inference, render_overlay)
