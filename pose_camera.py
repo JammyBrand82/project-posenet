@@ -182,10 +182,10 @@ def main():
             for label, keypoint in pose.keypoints.items():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
             if previous_pose is not None and (previous_pose.keypoints["nose"].yx[0] - pose.keypoints["nose"].yx[0]) < -20:
-                message += f"{Fore.RED}\"fall\": true{Style.RESET_ALL}"
+                message += "\"fall\": 1"
                 print(f"{Fore.RED}FALL{Style.RESET_ALL}")
             else:
-                message += "\"fall\": false"
+                message += "\"fall\": 0"
             message += "}"
             if previous_pose is not None:
             #    print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[0])}')
