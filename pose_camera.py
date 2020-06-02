@@ -188,8 +188,9 @@ def main():
             message += "}"
             if previous_pose is not None:
                 print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[1])}')
-                print(f'Current nose: {str(pose.keypoints["nose"].yx[1])}')
                 print(f'Difference: {str(previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1])}')
+
+            print(f'Current nose: {str(pose.keypoints["nose"].yx[1])}')
             #print(message)
             try:
                 iothub_client_send_telemetry(message)
