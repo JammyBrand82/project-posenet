@@ -187,6 +187,7 @@ def main():
             else:
                 message += "\"fall\": false"
             message += "}"
+            print(previous_pose)
             if previous_pose is not None:
                 print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[1])}')
                 print(f'Difference: {str(previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1])}')
