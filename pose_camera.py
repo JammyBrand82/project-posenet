@@ -155,6 +155,7 @@ def main():
         return engine.run_inference(input_tensor)
 
     def render_overlay(engine, output, src_size, inference_box):
+        previous_pose = None
         nonlocal n, sum_process_time, sum_inference_time, fps_counter
 
         svg_canvas = svgwrite.Drawing('', size=src_size)
@@ -178,9 +179,11 @@ def main():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
                 #print(' %-20s x=%-4d y=%-4d score=%.1f' %
                     #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
+            print(pose.keypoints["nose"])
             message += "}"
             print(message)
             iothub_client_send_telemetry(message)
+            previous_pose = pose
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
 

@@ -31,4 +31,4 @@ for pose in poses:
     print('\nPose Score: ', pose.score)
     for label, keypoint in pose.keypoints.items():
         print(' %-20s x=%-4d y=%-4d score=%.1f' %
-              (label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
+                (label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
