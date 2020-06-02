@@ -181,9 +181,9 @@ def main():
                 message += "\"" + label.replace(" ", "-") + "-x\": " + str(keypoint.yx[1]) + ",\"" + label.replace(" ", "-") + "-y\": " + str(keypoint.yx[0]) + ",\"" + label.replace(" ", "-") + "-score\": " + str(keypoint.score) + "," 
                 #print(' %-20s x=%-4d y=%-4d score=%.1f' %
                     #(label, keypoint.yx[1], keypoint.yx[0], keypoint.score))
-            if (previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1]) > 20
+            if (previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1]) > 20:
                 message += f"{Fore.RED}\"fall\": true{Style.RESET_ALL}"
-            else
+            else:
                 message += "\"fall\": false"
             message += "}"
             print(message)
