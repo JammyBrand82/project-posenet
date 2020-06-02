@@ -186,8 +186,15 @@ def main():
             else:
                 message += "\"fall\": false"
             message += "}"
-            print(message)
-            iothub_client_send_telemetry(message)
+            if previous_pose is not None:
+                print(f"Previous nose: {str(previous_pose.keypoints["nose"].yx[1])}")
+                print(f"Current nose: {str(pose.keypoints["nose"].yx[1])}")
+                print(f"Difference: {str(previous_pose.keypoints["nose"].yx[1] - pose.keypoints["nose"].yx[1])}")
+            #print(message)
+            try:
+                iothub_client_send_telemetry(message)
+            except KeyboardInterrupt:
+                print("IoT Hub error")
             previous_pose = pose
             draw_pose(svg_canvas, pose, src_size, inference_box)
         return (svg_canvas.tostring(), False)
