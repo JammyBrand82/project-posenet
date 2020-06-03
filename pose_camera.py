@@ -190,8 +190,9 @@ def main():
                 print(f'Difference: {str(previous_pose.keypoints["nose"].yx[0] - pose.keypoints["nose"].yx[0])}')
             try:
                 # Execute the IoT hub send message on a thread so we don't slow the pose estimation
-                hubThread = threading.Thread(target=iothub_client_send_telemetry, args=(message,))
-                hubThread.start()
+                iothub_client_send_telemetry(message)
+                #hubThread = threading.Thread(target=iothub_client_send_telemetry, args=(message,))
+                #hubThread.start()
             except KeyboardInterrupt:
                 print("IoT Hub error")
             print(message)
