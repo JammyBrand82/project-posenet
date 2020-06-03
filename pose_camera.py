@@ -65,7 +65,6 @@ def iothub_client_send_telemetry(message):
     try:
         client = iothub_client_init()
         client.send_message(message)
-        print("Message Sent")
     except KeyboardInterrupt:
         print("IoT Hub error")
 
@@ -159,8 +158,7 @@ def main():
         return engine.run_inference(input_tensor)
 
     def render_overlay(engine, output, src_size, inference_box):
-        nonlocal previous_pose
-        nonlocal n, sum_process_time, sum_inference_time, fps_counter
+        nonlocal n, sum_process_time, sum_inference_time, fps_counter, previous_pose
 
         svg_canvas = svgwrite.Drawing('', size=src_size)
         start_time = time.monotonic()
@@ -191,13 +189,15 @@ def main():
             #    print(f'Previous nose: {str(previous_pose.keypoints["nose"].yx[0])}')
                 print(f'Difference: {str(previous_pose.keypoints["nose"].yx[0] - pose.keypoints["nose"].yx[0])}')
             try:
-                iothub_client_send_telemetry(message)
+                # Execute the IoT hub send message on a thread so we don't slow the pose estimation
+                hubThread = threading.Thread(target=iothub_client_send_telemetry, args=(message,))
+                hubThread.start()
             except KeyboardInterrupt:
                 print("IoT Hub error")
             print(message)
             draw_pose(svg_canvas, pose, src_size, inference_box)
             previous_pose = copy.deepcopy(pose)
-            time.sleep(1)
+            time.sleep(.25)
         return (svg_canvas.tostring(), False)
 
     run(run_inference, render_overlay)
